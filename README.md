@@ -10,7 +10,7 @@ With Claude Code:
 
 ```bash
 claude plugin marketplace add nvsecurity/skills
-claude plugin install nightvision@nightvision
+claude plugin install nightvision@nvsecurity
 claude
 ```
 
@@ -18,7 +18,7 @@ Or within Claude Code:
 
 ```
 /plugin marketplace add nvsecurity/skills
-/plugin install nightvision@nightvision
+/plugin install nightvision@nvsecurity
 ```
 
 You may need to restart Claude Code for the plugin to load.

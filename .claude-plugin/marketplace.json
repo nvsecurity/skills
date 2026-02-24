@@ -1,9 +1,9 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "nightvision",
+  "name": "nvsecurity",
   "owner": {
     "name": "NightVision Engineering",
-    "email": "engineering@nightvision.net"
+    "email": "support@nightvision.net"
   },
   "metadata": {
     "description": "NightVision DAST and API Discovery skills for Claude Code",
@@ -16,7 +16,7 @@
       "description": "DAST scanning, API Discovery, and CI/CD integration for NightVision Security",
       "author": {
         "name": "NightVision Engineering",
-        "email": "engineering@nightvision.net"
+        "email": "support@nightvision.net"
       },
       "source": "./plugins/nightvision"
     }
