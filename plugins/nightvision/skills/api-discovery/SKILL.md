@@ -121,7 +121,7 @@ Common use cases:
 Search the codebase for existing OpenAPI/Swagger files:
 
 ```bash
-nightvision swagger detect ./
+nightvision swagger detect
 ```
 
 ## Code Traceback
