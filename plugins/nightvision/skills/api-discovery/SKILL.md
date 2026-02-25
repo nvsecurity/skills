@@ -77,10 +77,10 @@ if [ ! -e openapi-spec.yml ]; then cp backup-openapi-spec.yml openapi-spec.yml; 
 When static analysis can't resolve a variable (e.g., an API prefix read from an environment variable), it appears as a literal placeholder in the spec. NightVision generates an `nv.config` file to fix this.
 
 **Steps:**
-1. Run extraction — if unresolved variables exist, `nv.config` is created alongside the spec
+1. Run extraction — if unresolved variables exist, `nv.config` is created alongside the spec (in the first source directory passed to the command)
 2. Open `nv.config` — find the `replacements` object with `null` values
 3. Replace `null` with the actual values (check the app's config files, environment vars, etc.)
-4. Re-run extraction — the tool reads `nv.config` and substitutes the values
+4. Re-run extraction — the tool reads `nv.config` and substitutes the values. You can also use `-c` / `--config` to explicitly specify the config file path: `nightvision swagger extract . --lang python -c path/to/nv.config`
 
 ```json
 // nv.config example
@@ -98,14 +98,17 @@ The agent should help the user find the actual value by searching their config f
 Use `swagger diff` to measure coverage or detect breaking changes:
 
 ```bash
-# Full diff
+# Summary diff (paths and schemas counts)
 nightvision swagger diff original-spec.yml discovered-spec.yml
 
-# Show only path-level changes (endpoints added/removed)
+# Show only path-level changes (endpoints added/removed/modified)
 nightvision swagger diff original-spec.yml discovered-spec.yml --paths
 
 # Show only schema changes
 nightvision swagger diff original-spec.yml discovered-spec.yml --schemas
+
+# Show the full diff (paths and schemas together, with details)
+nightvision swagger diff original-spec.yml discovered-spec.yml --full-diff
 
 # Save diff output to file
 nightvision swagger diff original-spec.yml discovered-spec.yml -o diff-report.txt
@@ -118,10 +121,17 @@ Common use cases:
 
 ## Detecting existing specs
 
-Search the codebase for existing OpenAPI/Swagger files:
+Search the codebase for existing OpenAPI/Swagger files. The `detect` command takes no positional arguments — use `-p` to specify the root folder:
 
 ```bash
+# Detect project roots in the current directory
 nightvision swagger detect
+
+# Detect in a specific directory
+nightvision swagger detect -p ./path/to/code
+
+# Save detection results as JSON
+nightvision swagger detect -o detection-results.json
 ```
 
 ## Code Traceback
