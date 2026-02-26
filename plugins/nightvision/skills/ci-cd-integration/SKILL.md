@@ -193,7 +193,7 @@ See [references/ci-platforms.md](references/ci-platforms.md) for complete, copy-
 
 | Platform | Results surface | Upload mechanism |
 |----------|----------------|-----------------|
-| GitHub Actions | Security tab (Code Scanning) | `github/codeql-action/upload-sarif@v3` (needs `permissions: security-events: write`) |
+| GitHub Actions | Security tab (Code Scanning) | `github/codeql-action/upload-sarif@v3` (needs `permissions: contents: read, security-events: write`) |
 | GitLab CI | Vulnerability dashboard | Convert SARIF to GitLab security report JSON, `artifacts.reports.sast` |
 | Azure DevOps | Azure Boards work items | `sarif-manager azure create-work-items` |
 | Jenkins | Warnings Next Generation | `recordIssues tool: sarif(pattern: 'results.sarif')` |
@@ -210,3 +210,4 @@ See [references/ci-platforms.md](references/ci-platforms.md) for complete, copy-
 | Scan `TIMED_OUT` | Exceeded max duration | Increase `--max-duration-minutes` (up to 480) |
 | Scan `FAILED` | Engine error or target unreachable | Use `--verbose`, verify target is up |
 | 401 Unauthorized during scan | Auth credentials expired | Re-record authentication locally |
+| "Repository not found" in checkout | `permissions` block missing `contents: read` | Add `contents: read` alongside `security-events: write` in the workflow permissions |
