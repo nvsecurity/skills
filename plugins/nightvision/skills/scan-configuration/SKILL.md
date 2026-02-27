@@ -232,6 +232,24 @@ If the target is behind a corporate firewall, whitelist these NightVision AWS NA
 - 52.201.44.112
 - 50.17.248.188
 
+## Listing scans
+
+View scan history and status across projects.
+
+```bash
+# List scans in the current (or set) project
+nightvision scan list
+
+# Filter by one or more projects
+nightvision scan list -p my-project
+nightvision scan list -p project-a -p project-b
+
+# List scans across all projects
+nightvision scan list --all
+```
+
+Output includes scan ID, target name, status, start time, duration, and issue count.
+
 ## Scan engine options
 
 ```bash

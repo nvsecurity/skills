@@ -26,15 +26,26 @@ When a user asks for help with scan results:
 
 ## Exporting results
 
+If the user doesn't know their scan ID, list recent scans to find it:
+
+```bash
+nightvision scan list -p my-project
+```
+
 If the user has a scan ID but no exported file:
 
 ```bash
-# SARIF (structured, includes Code Traceback locations)
+# SARIF with Code Traceback (API targets — provide the spec used for the scan)
 nightvision export sarif -s "$SCAN_ID" --swagger-file openapi-spec.yml -o results.sarif
+
+# SARIF without Code Traceback (WEB targets, or when no spec is available)
+nightvision export sarif -s "$SCAN_ID" -o results.sarif
 
 # CSV (flat, good for quick overview)
 nightvision export csv -s "$SCAN_ID" -o results.csv
 ```
+
+`--swagger-file` is optional. When provided, SARIF output includes Code Traceback source annotations (file/line mappings). When omitted, the SARIF is still valid but won't contain source code locations.
 
 ## Reading SARIF files
 

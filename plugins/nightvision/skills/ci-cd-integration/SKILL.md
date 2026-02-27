@@ -169,6 +169,13 @@ SCAN_ID=$(head -n 1 scan-results.txt)
 
 **Exit code 0 does not mean "no vulnerabilities."** Use export commands to inspect findings.
 
+On failure (exit code 1), the CLI prints a status-specific error message:
+- **TIMED_OUT** — includes the configured `--max-duration-minutes` value and suggests increasing it
+- **ABORTED** — indicates the scan was aborted (by user or system)
+- **FAILED** — includes a link to the dashboard for investigation
+
+When the API provides a failure reason, it is included in the error message and displayed in the TUI dashboard.
+
 ### Private / internal targets (Smart Proxy)
 
 NightVision's Smart Proxy automatically tunnels scan traffic through the CLI when the target is not publicly reachable (localhost, Docker, Kubernetes, corporate networks). No configuration needed — it's built into the CLI.
@@ -178,14 +185,17 @@ Use `--force-private-scan` to force tunneling when the target appears publicly a
 ## Exporting results
 
 ```bash
-# SARIF (for GitHub Code Scanning, Azure DevOps, GitLab SAST, Jenkins Warnings)
+# SARIF with Code Traceback (API targets — provide the spec used for the scan)
 nightvision export sarif -s "$SCAN_ID" --swagger-file openapi-spec.yml -o results.sarif
+
+# SARIF without Code Traceback (WEB targets, or when no spec is available)
+nightvision export sarif -s "$SCAN_ID" -o results.sarif
 
 # CSV (for reports, spreadsheets, custom processing)
 nightvision export csv -s "$SCAN_ID" -o results.csv
 ```
 
-**SARIF requires `--swagger-file`** — the spec file used for the scan.
+`--swagger-file` is optional. When provided, SARIF output includes Code Traceback source annotations (file paths and line numbers linking findings to source code). When omitted, the SARIF is still valid but won't contain source locations. Always provide `--swagger-file` for API targets when the spec is available.
 
 ## CI platform quick reference
 
@@ -207,7 +217,8 @@ See [references/ci-platforms.md](references/ci-platforms.md) for complete, copy-
 | "login authentication token has expired" | Token expired or invalid | `nightvision token create`, update CI secret |
 | "API is unreachable" | Network/firewall issue | Check `NIGHTVISION_API_URL`, network connectivity |
 | "SSL certificate error" | TLS verification failed | Fix certs, or `--skip-tls-verify` (not for production) |
-| Scan `TIMED_OUT` | Exceeded max duration | Increase `--max-duration-minutes` (up to 480) |
-| Scan `FAILED` | Engine error or target unreachable | Use `--verbose`, verify target is up |
+| Scan `TIMED_OUT` | Exceeded max duration | CLI error message shows the current limit; increase `--max-duration-minutes` (up to 480) |
+| Scan `ABORTED` | Scan was cancelled by user or system | Check the failure reason in the CLI output or dashboard |
+| Scan `FAILED` | Engine error or target unreachable | CLI error includes a dashboard link; also use `--verbose` and verify target is up |
 | 401 Unauthorized during scan | Auth credentials expired | Re-record authentication locally |
 | "Repository not found" in checkout | `permissions` block missing `contents: read` | Add `contents: read` alongside `security-events: write` in the workflow permissions |
