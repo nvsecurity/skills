@@ -1,0 +1,3 @@
+[submodule "plugins/nightvision"]
+	path = plugins/nightvision
+	url = https://github.com/nvsecurity/nightvision-skills.git

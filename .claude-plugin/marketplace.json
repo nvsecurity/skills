@@ -18,7 +18,11 @@
         "name": "NightVision Engineering",
         "email": "support@nightvision.net"
       },
-      "source": "./plugins/nightvision"
+      "source": {
+        "source": "url",
+        "url": "https://github.com/nvsecurity/nightvision-skills.git"
+      },
+      "homepage": "https://github.com/nvsecurity/nightvision-skills"
     }
   ]
 }
