@@ -37,6 +37,8 @@ claude
 
 ```
 /plugin marketplace add nvsecurity/skills
+```
+```
 /plugin install nightvision@nvsecurity
 ```
 
